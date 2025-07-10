@@ -1,7 +1,6 @@
 "use client";
 
 import Card from "@/components/Card";
-import Filter from "@/components/Filter";
 import Header from "@/components/Header";
 import Search from "@/components/Search";
 import React from "react";
@@ -53,17 +52,18 @@ export default function Home() {
     <div className="flex flex-col gap-12 h-screen">
       <Header />
       <Search />
-      <Filter />
-      {information.map((item: any) => (
-        <Card
-          key={item.name}
-          name={item.name}
-          flag={item.flag}
-          population={item.population}
-          region={item.region}
-          capital={item.capital}
-        />
-      ))}
+      <section className="w-full max-w-[60vw] mx-auto grid [grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))] [grid-auto-rows:23rem] gap-15 md:max-w-[80vw]">
+        {information.map((item: any) => (
+          <Card
+            key={item.name}
+            name={item.name}
+            flag={item.flag}
+            population={item.population}
+            region={item.region}
+            capital={item.capital}
+          />
+        ))}
+      </section>
     </div>
   );
 }

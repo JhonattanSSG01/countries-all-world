@@ -12,30 +12,30 @@ type Props = {
 
 const Card = ({ name, flag, population, region, capital } : Props) => {
   return (
-    <article className="w-full max-w-sm mx-auto rounded-lg shadow-lg bg-white">
-      <figure className="flex justify-center">
+    <article className="w-full h-fit rounded-lg shadow-lg bg-white md:cursor-pointer md:hover:shadow-2xl md:hover:scale-105 transition-all">
+      <figure className="relative w-full h-48 flex justify-center">
         <Image
           src={flag || ""}
-          alt="Vercel Logo"
+          alt="Bandera de país"
           width={0}
           height={0}
-          className="w-full h-full object-contai rounded-t-lg"
+          className="w-full h-full object-cover rounded-t-lg"
         />
         <figcaption className="sr-only">Bandera de {name || ""}</figcaption>
       </figure>
 
       <div className="p-6">
-        <h4 className="mb-4 text-lg font-semibold">{name || ""}</h4>
+        <h4 className="mb-4 text-lg font-extrabold">{name || ""}</h4>
 
-        <section className="space-y-1">
+        <section className="space-y-1 text-sm">
           <p>
-            <strong>Population</strong> {population || ""}
+            <strong>Population:</strong> {population || ""}
           </p>
           <p>
-            <strong>Region</strong> {region || ""}
+            <strong>Region:</strong> {region || ""}
           </p>
           <p>
-            <strong>Capital</strong> {capital || ""}
+            <strong>Capital:</strong> {capital || ""}
           </p>
         </section>
       </div>

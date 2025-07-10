@@ -1,12 +1,23 @@
-import React from 'react'
+import React from "react";
 
 const Header = () => {
   return (
     <header className="py-8 px-10 flex justify-between items-center shadow-md bg-white">
       <h2 className="text-xl font-bold">Where in the world?</h2>
-      <button className="text-lg capitalize cursor-pointer">dark mode</button>
+      <button className="flex items-center gap-2 cursor-pointer">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          className="w-4 h-4"
+        >
+          <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 1 0 9.79 9.79z" />
+        </svg>
+        <span className="text-lg capitalize">dark mode</span>
+      </button>
     </header>
   );
-}
+};
 
-export default Header
+export default Header;
