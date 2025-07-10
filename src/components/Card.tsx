@@ -7,12 +7,13 @@ type Props = {
   population: number;
   region: string;
   capital: string;
+  onClick: () => void
 }
 
 
-const Card = ({ name, flag, population, region, capital } : Props) => {
+const Card = ({ name, flag, population, region, capital, onClick } : Props) => {
   return (
-    <article className="w-full h-fit rounded-lg shadow-lg bg-white md:cursor-pointer md:hover:shadow-2xl md:hover:scale-105 transition-all">
+    <article className="w-full h-fit rounded-lg shadow-lg bg-white md:cursor-pointer md:hover:shadow-2xl md:hover:scale-105 transition-all" onClick={onClick}>
       <figure className="relative w-full h-48 flex justify-center">
         <Image
           src={flag || ""}

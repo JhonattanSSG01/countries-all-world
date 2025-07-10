@@ -3,6 +3,7 @@
 import Card from "@/components/Card";
 import Header from "@/components/Header";
 import Search from "@/components/Search";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 type Country = {
@@ -14,6 +15,7 @@ type Country = {
 };
 
 export default function Home() {
+  const router = useRouter()
   const [information, setInformation] = React.useState<Country[]>([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -61,6 +63,7 @@ export default function Home() {
             population={item.population}
             region={item.region}
             capital={item.capital}
+            onClick={() => router.push(`/country?name=${item.name}`)}
           />
         ))}
       </section>
