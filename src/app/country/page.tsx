@@ -19,6 +19,7 @@ type Country = {
   topLevelDomain: string[];
   currencies: string;
   languages: string;
+  borders: string[];
 };
 
 const page = () => {
@@ -52,6 +53,7 @@ const page = () => {
           topLevelDomain: item.tld?.[0] ?? "",
           currencies: currency?.name,
           languages: language,
+          borders: item.borders,
         };
       });
       setInformation(mapTodo);
@@ -75,20 +77,31 @@ const page = () => {
       <Header />
       <div className="max-w-[90vw] mx-auto | lg:w-[90%]">
         <button
-          className="w-fit py-3 px-12 mb-8 rounded-lg shadow-lg bg-white cursor-pointer hover:bg-gray-200 transition-all"
+          className="w-fit py-3 px-8 mb-12 flex justify-between items-center gap-2 rounded-lg shadow-lg bg-white cursor-pointer hover:bg-gray-200 transition-all"
           onClick={() => router.back()}
         >
-          Back
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+          <span>Back</span>
         </button>
 
-        <section className="flex flex-col justify-between gap-10 | lg:flex-row">
-          <figure className="relative w-full h-80 max-w-2xl flex justify-center">
+        <section className="flex flex-col justify-between gap-10 | lg:flex-row lg:items-center">
+          <figure className="relative w-full h-full max-w-2xl flex justify-center">
             <Image
               src={information[0]?.flag}
               alt="Bandera de país"
               width={0}
               height={0}
-              className="w-full h-full object-cover"
+              className="w-full h-full max-h-[40vh] object-cover"
               priority
             />
             <figcaption className="sr-only">
@@ -96,11 +109,11 @@ const page = () => {
             </figcaption>
           </figure>
 
-          <article className="w-full max-w-2xl py-6 flex flex-col gap-6">
+          <article className="w-full max-w-2xl py-6 flex flex-col gap-6 | md:gap-8">
             <h4 className="text-xl font-extrabold">{information[0]?.name}</h4>
 
-            <div className="flex flex-col gap-10 | lg:flex-row">
-              <section className="space-y-3 text-md">
+            <div className="flex flex-col gap-10 | text-md | md:flex-row | 2xl:text-lg ">
+              <section className="space-y-3">
                 <p>
                   <strong>Native Name: </strong>
                   {information[0]?.nativeName.common}
@@ -119,7 +132,7 @@ const page = () => {
                 </p>
               </section>
 
-              <section className="space-y-3 text-md">
+              <section className="space-y-3">
                 <p>
                   <strong>Top Level Domain:</strong>{" "}
                   {information[0]?.topLevelDomain}
@@ -131,6 +144,13 @@ const page = () => {
                   <strong>Languages:</strong> {information[0]?.languages}
                 </p>
               </section>
+            </div>
+
+            <div className="flex flex-col gap-4 | md:flex-row md:mt-4 md:items-center">
+              <h5 className="text-lg font-extrabold">Border Countries:</h5>
+              <button className="w-fit py-1 px-4 rounded-md shadow-xl bg-white cursor-pointer hover:bg-gray-200 transition-all">
+                {information[0]?.borders}
+              </button>
             </div>
           </article>
         </section>

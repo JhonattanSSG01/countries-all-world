@@ -1,14 +1,50 @@
 import React from "react";
 
-const Search = () => {
+enum Region {
+  Africa = "Africa",
+  America = "America",
+  Asia = "Asia",
+  Europe = "Europe",
+  Oceania = "Oceania",
+}
+
+const regions: Region[] = [
+  Region.Africa,
+  Region.America,
+  Region.Asia,
+  Region.Europe,
+  Region.Oceania,
+];
+
+const Search = ({ onSelect, onSearch }: { onSelect: (region: string) => void, onSearch: (search: string) => void }) => {
   const [open, setOpen] = React.useState<boolean>(false);
+  const [selected, setSelected] = React.useState("Filter by Region");
+  const [search, setSearch] = React.useState("");
 
   const filterRef = React.useRef<HTMLButtonElement>(null);
+  const optionsRef = React.useRef<HTMLUListElement>(null);
+
+  const handleSelect = (region: string) => {
+    setSelected(region);
+    onSelect(region);
+    setOpen(false);
+  };
+  
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setSearch(e.target.value);
+    search.length >= 2 ? onSearch(e.target.value) : onSearch("");
+  };
 
   // Escucha global para detectar clics afuera
   React.useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(e.target as Node) &&
+        optionsRef.current &&
+        !optionsRef.current.contains(e.target as Node)
+      ) {
         setOpen(false);
       }
     };
@@ -46,54 +82,54 @@ const Search = () => {
             id="search"
             placeholder="Search for a country..."
             className="w-full py-4 pl-12 pr-4 rounded-lg shadow-md bg-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
+            value={search}
+            onChange={(e) => handleSearch(e)}
+            autoComplete="off"
+            onKeyDown={(e) => e.key === "Enter" && handleSearch(e as unknown as React.ChangeEvent<HTMLInputElement>)}
           />
         </div>
       </form>
 
       <div className="flex items-center">
-        <section className="relative w-2xs">
+        <section className="relative w-3xs">
           <button
             ref={filterRef}
-            className="w-full py-4 px-8 rounded-lg shadow-md bg-white cursor-pointer text-left hover:bg-gray-200 transition-all"
+            className="w-full py-4 px-8 flex flex-row-reverse items-center justify-between rounded-lg shadow-md bg-white cursor-pointer text-left hover:bg-gray-200 transition-all"
             onClick={() => setOpen(!open)}
           >
-            Filter by Region
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              width="15"
+              height="15"
+              className={` rotate-90 ${
+                open ? "rotate-270" : ""
+              } transition-transform duration-300 ease-in-out`}
+            >
+              <path d="M9 5l7 7-7 7" />
+            </svg>
+            <span>{selected}</span>
           </button>
 
           {/* Ícono de flecha dentro del input */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            width="15"
-            height="15"
-            className={`absolute right-4 top-1/2 transform -translate-y-1/2 rotate-90 ${
-              open ? "rotate-270" : ""
-            } transition-transform duration-300 ease-in-out`}
-          >
-            <path
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
 
           {open && (
-            <ul className="absolute left-0 mt-2 w-full bg-white rounded-md shadow-md z-10">
-              <li className="px-6 py-2 hover:bg-gray-100 cursor-pointer">
-                Africa
-              </li>
-              <li className="px-6 py-2 hover:bg-gray-100 cursor-pointer">
-                America
-              </li>
-              <li className="px-6 py-2 hover:bg-gray-100 cursor-pointer">
-                Asia
-              </li>
-              <li className="px-6 py-2 hover:bg-gray-100 cursor-pointer">
-                Europe
-              </li>
-              <li className="px-6 py-2 hover:bg-gray-100 cursor-pointer">
-                Oceania
-              </li>
+            <ul
+              ref={optionsRef}
+              className="absolute left-0 mt-2 w-full bg-white rounded-md shadow-md z-10"
+            >
+              {regions.map((region) => (
+                <li key={region}>
+                  <button
+                    onClick={() => handleSelect(region)}
+                    className="w-full py-1 px-8 text-left cursor-pointer hover:bg-gray-200 transition-all"
+                  >
+                    {region}
+                  </button>
+                </li>
+              ))}
             </ul>
           )}
         </section>
