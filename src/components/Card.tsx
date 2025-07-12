@@ -1,5 +1,5 @@
-import Image from 'next/image'
-import React from 'react'
+import Image from "next/image";
+import React from "react";
 
 type Props = {
   name: string;
@@ -7,21 +7,27 @@ type Props = {
   population: number;
   region: string;
   capital: string;
-  onClick: () => void
-}
+  onClick: () => void;
+};
 
-const Card = ({ name, flag, population, region, capital, onClick } : Props) => {
+const Card = ({ name, flag, population, region, capital, onClick }: Props) => {
   return (
-    <article className="w-full h-fit rounded-lg shadow-lg bg-white md:cursor-pointer md:hover:shadow-2xl md:hover:scale-105 transition-all" onClick={onClick}>
+    <article
+      className="w-full h-fit rounded-lg shadow-lg bg-white md:cursor-pointer md:hover:shadow-2xl md:hover:scale-105 transition-all"
+      onClick={onClick}
+    >
       <figure className="relative w-full h-48 flex justify-center">
-        <Image
-          src={flag || ""}
-          alt="Bandera de país"
-          width={0}
-          height={0}
-          className="w-full h-full object-cover rounded-t-lg"
-          loading='lazy'
-        />
+        {flag !== "" && (
+          <Image
+            src={flag || ""}
+            alt="Bandera de país"
+            width={0}
+            height={0}
+            className="w-full h-full object-cover rounded-t-lg"
+            loading="lazy"
+          />
+        )}
+
         <figcaption className="sr-only">Bandera de {name || ""}</figcaption>
       </figure>
 
@@ -42,6 +48,6 @@ const Card = ({ name, flag, population, region, capital, onClick } : Props) => {
       </div>
     </article>
   );
-}
+};
 
-export default Card
+export default Card;

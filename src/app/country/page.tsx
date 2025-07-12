@@ -2,7 +2,8 @@
 
 import countryServices from "@/api/country.service";
 import API_CONFIG from "@/utils/apiConfig";
-import { CountryDetail } from "@/utils/types";
+import { adaptCountryDetailList } from "@/utils/countryAdpater";
+import { CountryDetail, ResponseCountry } from "@/utils/types";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
@@ -12,10 +13,24 @@ const page = () => {
   const router = useRouter();
   const countryName = useSearchParams().get("name");
 
-  // Local state
-  const [country, setCountry] = React.useState<CountryDetail[]>([]);
-  const [loading, setLoading] = React.useState(true);
+  // Helpers
+  const initialData = {
+    name: "",
+    nativeName: "",
+    population: 0,
+    region: "",
+    capital: "",
+    subregion: "",
+    flags: "",
+    topLevelDomain: "",
+    currencies: "",
+    languages: [],
+    borders: [],
+  };
 
+  // Local state
+  const [country, setCountry] = React.useState<CountryDetail>(initialData);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
   /**
    * Gets countries from API and updates state
@@ -31,36 +46,39 @@ const page = () => {
    * When finished, sets loading state to false
    */
   const getData = async () => {
+    setLoading(true);
     const API = await countryServices(API_CONFIG.NAME, countryName as string);
 
     const { data, status } = API;
 
     if (data?.length && status === 200) {
-      const mapTodo: CountryDetail[] = data.map((item: any) => {
-        const nativeNameKey = Object.keys(item.name.nativeName || {})[0];
-        const nativeName = item.name.nativeName?.[nativeNameKey];
+      const apiCountryDetail: CountryDetail[] = adaptCountryDetailList(
+        data as ResponseCountry[]
+      );
 
-        const currencyKey = Object.keys(item.currencies || {})[0];
-        const currency = item.currencies?.[currencyKey];
+      // Destructuring
+      const [country] = apiCountryDetail || [];
 
-        return {
-          name: item.name.common,
-          nativeName: nativeName,
-          population: item.population,
-          region: item.region,
-          capital: item.capital?.[0] ?? "",
-          subregion: item.subregion,
-          flag: item.flags.svg,
-          topLevelDomain: item.tld?.[0] ?? "",
-          currencies: currency?.name,
-          languages: item.languages ? Object.values(item.languages) : [],
-          borders: item.borders,
-        };
+      // Get border countries
+      const CODE = country.borders
+        .map((border: string) => {
+          return countryServices(API_CONFIG.CODE, border);
+        })
+        .map((API) => API);
+
+      const responses = await Promise.all(CODE);
+
+      const bordersName = responses.map((response) => {
+        const { data } = response;
+        return data[0].name.common;
       });
 
-      setCountry(mapTodo);
+      country.borders = bordersName;
+
+      // Update state
+      setCountry(country);
     } else {
-      setCountry([]);
+      setCountry(initialData);
     }
 
     setLoading(false);
@@ -68,13 +86,13 @@ const page = () => {
 
   React.useEffect(() => {
     getData();
-  }, []);
+  }, [countryName]);
 
   return (
-    <div className="w-[90%] max-w-[90vw] mx-auto flex flex-col gap-12 h-screen">
+    <div className="w-[90%] h-auto max-w-[90vw] mx-auto flex flex-col gap-12">
       <button
-        className="w-fit py-3 px-8 mb-12 flex justify-between items-center gap-2 rounded-lg shadow-lg bg-white cursor-pointer hover:bg-gray-200 transition-all"
-        onClick={() => router.back()}
+        className="w-fit py-3 px-8 flex justify-between items-center gap-2 rounded-lg shadow-lg bg-white cursor-pointer hover:bg-gray-200 transition-all md:mb-12"
+        onClick={() => router.push("/")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -105,63 +123,70 @@ const page = () => {
         ) : (
           <>
             <figure className="relative w-full h-full max-w-2xl flex justify-center">
-              <Image
-                src={country[0]?.flag}
-                alt="Bandera de país"
-                width={0}
-                height={0}
-                className="w-full h-full max-h-[40vh] object-cover"
-                priority
-              />
+              {country?.flags !== "" && (
+                <Image
+                  src={country?.flags}
+                  alt="Bandera de país"
+                  width={0}
+                  height={0}
+                  className="w-full h-full max-h-[40vh] object-cover"
+                  loading="lazy"
+                />
+              )}
               <figcaption className="sr-only">
-                Bandera de {country[0]?.name.common}{" "}
+                Bandera de {country?.name}{" "}
               </figcaption>
             </figure>
 
             <article className="w-full max-w-2xl py-6 flex flex-col gap-6 | md:gap-8">
-              <h4 className="text-xl font-extrabold">
-                {country[0]?.name.common}
-              </h4>
+              <h4 className="text-xl font-extrabold">{country?.name}</h4>
 
               <div className="flex flex-col gap-10 | text-md | md:flex-row | 2xl:text-lg ">
                 <section className="space-y-3">
                   <p>
                     <strong>Native Name: </strong>
-                    {country[0]?.nativeName.common}
+                    {country.nativeName}
                   </p>
                   <p>
-                    <strong>Population:</strong> {country[0]?.population}
+                    <strong>Population:</strong> {country?.population}
                   </p>
                   <p>
-                    <strong>Region:</strong> {country[0]?.region}
+                    <strong>Region:</strong> {country?.region}
                   </p>
                   <p>
-                    <strong>Sub Region:</strong> {country[0]?.subregion}
+                    <strong>Sub Region:</strong> {country?.subregion}
                   </p>
                   <p>
-                    <strong>Capital:</strong> {country[0]?.capital}
+                    <strong>Capital:</strong> {country?.capital}
                   </p>
                 </section>
 
                 <section className="space-y-3">
                   <p>
-                    <strong>Top Level Domain:</strong>{" "}
-                    {country[0]?.topLevelDomain}
+                    <strong>Top Level Domain:</strong> {country?.topLevelDomain}
                   </p>
                   <p>
-                    <strong>Currencies:</strong> {country[0]?.currencies}
+                    <strong>Currencies:</strong> {country?.currencies}
                   </p>
                   <p>
-                    <strong>Languages:</strong> {country[0]?.languages}
+                    <strong>Languages:</strong> {country?.languages}
                   </p>
                 </section>
               </div>
 
               <div className="flex flex-col gap-4 | md:flex-row md:mt-4 md:items-center">
                 <h5 className="text-lg font-extrabold">Border Countries:</h5>
-                <button className="w-fit py-1 px-4 rounded-md shadow-xl bg-white cursor-pointer hover:bg-gray-200 transition-all">
-                  {country[0]?.borders}
-                </button>
+                <div className="flex flex-wrap justify-start gap-2">
+                  {country?.borders.map((border) => (
+                    <button
+                      key={border}
+                      className="w-fit py-1 px-4 rounded-md shadow-xl bg-white cursor-pointer hover:bg-gray-200 transition-all"
+                      onClick={() => router.push(`/country?name=${border}`)}
+                    >
+                      {border}
+                    </button>
+                  ))}
+                </div>
               </div>
             </article>
           </>
