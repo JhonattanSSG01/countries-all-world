@@ -21,6 +21,7 @@ const Card = ({ name, flag, population, region, capital, onClick } : Props) => {
           width={0}
           height={0}
           className="w-full h-full object-cover rounded-t-lg"
+          loading='lazy'
         />
         <figcaption className="sr-only">Bandera de {name || ""}</figcaption>
       </figure>

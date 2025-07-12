@@ -1,14 +1,8 @@
+import { Region } from "@/utils/types";
 import React from "react";
 
-enum Region {
-  Africa = "Africa",
-  America = "America",
-  Asia = "Asia",
-  Europe = "Europe",
-  Oceania = "Oceania",
-}
-
-const regions: Region[] = [
+const regions = [
+  Region.All,
   Region.Africa,
   Region.America,
   Region.Asia,
@@ -16,24 +10,32 @@ const regions: Region[] = [
   Region.Oceania,
 ];
 
-const Search = ({ onSelect, onSearch }: { onSelect: (region: string) => void, onSearch: (search: string) => void }) => {
+const Search = ({
+  onSelect,
+  onSearch,
+}: {
+  onSelect: (region: Region) => void;
+  onSearch: (search: string) => void;
+}) => {
   const [open, setOpen] = React.useState<boolean>(false);
-  const [selected, setSelected] = React.useState("Filter by Region");
+  const [selected, setSelected] = React.useState<Region>(Region.All);
   const [search, setSearch] = React.useState("");
 
   const filterRef = React.useRef<HTMLButtonElement>(null);
   const optionsRef = React.useRef<HTMLUListElement>(null);
 
-  const handleSelect = (region: string) => {
+  const handleSelect = (region: Region) => {
     setSelected(region);
     onSelect(region);
+    setSearch("");
     setOpen(false);
   };
-  
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setSearch(e.target.value);
-    search.length >= 2 ? onSearch(e.target.value) : onSearch("");
+    const onlyLetters = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+    setSearch(onlyLetters);
+    search.length >= 2 ? onSearch(onlyLetters) : onSearch("");
   };
 
   // Escucha global para detectar clics afuera
@@ -85,42 +87,66 @@ const Search = ({ onSelect, onSearch }: { onSelect: (region: string) => void, on
             value={search}
             onChange={(e) => handleSearch(e)}
             autoComplete="off"
-            onKeyDown={(e) => e.key === "Enter" && handleSearch(e as unknown as React.ChangeEvent<HTMLInputElement>)}
+            onKeyDown={(e) =>
+              e.key === "Enter" &&
+              handleSearch(e as unknown as React.ChangeEvent<HTMLInputElement>)
+            }
           />
         </div>
       </form>
 
       <div className="flex items-center">
-        <section className="relative w-3xs">
-          <button
-            ref={filterRef}
-            className="w-full py-4 px-8 flex flex-row-reverse items-center justify-between rounded-lg shadow-md bg-white cursor-pointer text-left hover:bg-gray-200 transition-all"
-            onClick={() => setOpen(!open)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              width="15"
-              height="15"
-              className={` rotate-90 ${
-                open ? "rotate-270" : ""
-              } transition-transform duration-300 ease-in-out`}
+        <div className="relative w-3xs">
+          <section className="flex gap-3">
+            <button
+              ref={filterRef}
+              className="w-full py-4 px-8 flex flex-row-reverse items-center justify-between rounded-lg shadow-md bg-white cursor-pointer text-left hover:bg-gray-200 transition-all"
+              onClick={() => setOpen(!open)}
             >
-              <path d="M9 5l7 7-7 7" />
-            </svg>
-            <span>{selected}</span>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                width="15"
+                height="15"
+                className={`rotate-90 ${
+                  open ? "rotate-270" : ""
+                } transition-transform duration-300 ease-in-out`}
+              >
+                <path d="M9 5l7 7-7 7" />
+              </svg>
+              <span>{selected}</span>
+            </button>
+
+            {selected !== Region.All && (
+              <button
+                className="group p-4 rounded-lg shadow-md bg-white cursor-pointer text-left hover:bg-gray-300 transition-all"
+                onClick={() => handleSelect(Region.All)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  className="transform group-hover:rotate-90 transition-transform duration-300 ease-in-out"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            )}
+          </section>
 
           {/* Ícono de flecha dentro del input */}
-
           {open && (
             <ul
               ref={optionsRef}
               className="absolute left-0 mt-2 w-full bg-white rounded-md shadow-md z-10"
             >
-              {regions.map((region) => (
+              {regions.filter((region) => region !== selected && region !== Region.All).map((region) => (
                 <li key={region}>
                   <button
                     onClick={() => handleSelect(region)}
@@ -132,7 +158,7 @@ const Search = ({ onSelect, onSearch }: { onSelect: (region: string) => void, on
               ))}
             </ul>
           )}
-        </section>
+        </div>
       </div>
     </div>
   );
