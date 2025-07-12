@@ -98,7 +98,7 @@ export default function Home() {
   }, [region, debounceCountry]);
 
   return (
-    <div className="flex flex-col gap-12 h-screen">
+    <div className="flex flex-col gap-12">
       <Search
         onSelect={(region: Region) => setRegion(region)}
         onSearch={(search: string) => setSearch(search)}

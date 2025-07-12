@@ -94,7 +94,7 @@ const Search = ({
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-5 h-5 text-gray-400"
+              className="w-5 h-5 text-white"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -106,7 +106,7 @@ const Search = ({
             type="search"
             id="search"
             placeholder="Search for a country..."
-            className="w-full py-4 pl-12 pr-4 rounded-lg shadow-md placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 light"
+            className="w-full py-4 pl-12 pr-4 rounded-lg shadow-md placeholder:text-white focus:outline-none focus:ring-2 focus:ring-gray-300 input"
             value={search}
             onChange={(e) => handleSearch(e)}
             autoComplete="off"

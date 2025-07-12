@@ -13,7 +13,7 @@ const Header = () => {
 
   return (
     <header className="py-8 px-10 mb-10 flex justify-between items-center shadow-md light">
-      <h2 className="text-xl font-bold">Where in the world?</h2>
+      <h2 className="text-md font-extrabold">Where in the world?</h2>
       <button
         className="flex items-center gap-2 cursor-pointer"
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -27,7 +27,7 @@ const Header = () => {
         >
           <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 1 0 9.79 9.79z" />
         </svg>
-        <span className="text-lg capitalize">dark mode</span>
+        <span className="text-md capitalize">dark mode</span>
       </button>
     </header>
   );
