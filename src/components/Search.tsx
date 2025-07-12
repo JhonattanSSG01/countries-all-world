@@ -1,6 +1,7 @@
 import { Region } from "@/utils/types";
 import React from "react";
 
+// Data
 const regions = [
   Region.All,
   Region.Africa,
@@ -17,12 +18,23 @@ const Search = ({
   onSelect: (region: Region) => void;
   onSearch: (search: string) => void;
 }) => {
+  // Local state
   const [open, setOpen] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<Region>(Region.All);
   const [search, setSearch] = React.useState("");
 
+  // Ref
   const filterRef = React.useRef<HTMLButtonElement>(null);
   const optionsRef = React.useRef<HTMLUListElement>(null);
+
+  /**
+   * Handles the selection of a region.
+   *
+   * Sets the selected region, triggers the onSelect callback,
+   * clears the search input, and closes the dropdown menu.
+   *
+   * @param {Region} region - The region that has been selected.
+   */
 
   const handleSelect = (region: Region) => {
     setSelected(region);
@@ -31,6 +43,16 @@ const Search = ({
     setOpen(false);
   };
 
+  /**
+   * Function that handles the search input.
+   *
+   * Listens for the input's onChange event and updates the search state with
+   * the input's value. Then, if the value is greater than 2,
+   * calls the onSearch function with the input's value; otherwise, it calls the
+   * onSearch function with an empty string.
+   *
+   * @param e React.ChangeEvent<HTMLInputElement> event
+   */
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const onlyLetters = e.target.value.replace(/[^a-zA-Z\s]/g, "");
@@ -38,8 +60,9 @@ const Search = ({
     search.length >= 2 ? onSearch(onlyLetters) : onSearch("");
   };
 
-  // Escucha global para detectar clics afuera
+  // Effect
   React.useEffect(() => {
+    // Global listening to detect clicks outside
     const handleClickOutside = (e: MouseEvent) => {
       if (
         filterRef.current &&
@@ -146,16 +169,20 @@ const Search = ({
               ref={optionsRef}
               className="absolute left-0 mt-2 w-full bg-white rounded-md shadow-md z-10"
             >
-              {regions.filter((region) => region !== selected && region !== Region.All).map((region) => (
-                <li key={region}>
-                  <button
-                    onClick={() => handleSelect(region)}
-                    className="w-full py-1 px-8 text-left cursor-pointer hover:bg-gray-200 transition-all"
-                  >
-                    {region}
-                  </button>
-                </li>
-              ))}
+              {regions
+                .filter(
+                  (region) => region !== selected && region !== Region.All
+                )
+                .map((region) => (
+                  <li key={region}>
+                    <button
+                      onClick={() => handleSelect(region)}
+                      className="w-full py-1 px-8 text-left cursor-pointer hover:bg-gray-200 transition-all"
+                    >
+                      {region}
+                    </button>
+                  </li>
+                ))}
             </ul>
           )}
         </div>

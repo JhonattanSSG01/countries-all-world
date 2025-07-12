@@ -2,7 +2,7 @@ import React from "react";
 
 const Header = () => {
   return (
-    <header className="py-8 px-10 flex justify-between items-center shadow-md bg-white">
+    <header className="py-8 px-10 mb-10 flex justify-between items-center shadow-md bg-white">
       <h2 className="text-xl font-bold">Where in the world?</h2>
       <button className="flex items-center gap-2 cursor-pointer">
         <svg

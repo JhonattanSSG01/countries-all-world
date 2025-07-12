@@ -7,7 +7,9 @@ export type Country = {
 };
 
 export type CountryDetail = {
-  name: string;
+  name: {
+    common: string;
+  };
   nativeName: {
     official: string;
     common: string;
@@ -19,14 +21,14 @@ export type CountryDetail = {
   flag: string;
   topLevelDomain: string[];
   currencies: string;
-  languages: string;
+  languages: string[];
   borders: string[];
 };
 
 export type ResponseApi = {
   message: string;
   status: number;
-  data?: Country[];
+  data?: Country[] | CountryDetail[];
 }
 
  export enum Region {

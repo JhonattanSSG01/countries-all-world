@@ -10,7 +10,6 @@ type Props = {
   onClick: () => void
 }
 
-
 const Card = ({ name, flag, population, region, capital, onClick } : Props) => {
   return (
     <article className="w-full h-fit rounded-lg shadow-lg bg-white md:cursor-pointer md:hover:shadow-2xl md:hover:scale-105 transition-all" onClick={onClick}>
