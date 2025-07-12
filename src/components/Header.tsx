@@ -1,14 +1,27 @@
+"use client";
+
+import { useTheme } from "next-themes";
 import React from "react";
 
 const Header = () => {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => setMounted(true), []);
+
+    if (!mounted) return null;
+
   return (
-    <header className="py-8 px-10 mb-10 flex justify-between items-center shadow-md bg-white">
+    <header className="py-8 px-10 mb-10 flex justify-between items-center shadow-md light">
       <h2 className="text-xl font-bold">Where in the world?</h2>
-      <button className="flex items-center gap-2 cursor-pointer">
+      <button
+        className="flex items-center gap-2 cursor-pointer"
+        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
-          fill="none"
+          fill={theme === "dark" ? "white" : "black"}
           stroke="currentColor"
           className="w-4 h-4"
         >

@@ -106,7 +106,7 @@ const Search = ({
             type="search"
             id="search"
             placeholder="Search for a country..."
-            className="w-full py-4 pl-12 pr-4 rounded-lg shadow-md bg-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
+            className="w-full py-4 pl-12 pr-4 rounded-lg shadow-md placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 light"
             value={search}
             onChange={(e) => handleSearch(e)}
             autoComplete="off"
@@ -123,7 +123,7 @@ const Search = ({
           <section className="flex gap-3">
             <button
               ref={filterRef}
-              className="w-full py-4 px-8 flex flex-row-reverse items-center justify-between rounded-lg shadow-md bg-white cursor-pointer text-left hover:bg-gray-200 transition-all"
+              className="w-full py-4 px-8 flex flex-row-reverse items-center justify-between rounded-lg shadow-md cursor-pointer text-left hover:bg-gray-200 transition-all light"
               onClick={() => setOpen(!open)}
             >
               <svg
@@ -144,7 +144,7 @@ const Search = ({
 
             {selected !== Region.All && (
               <button
-                className="group p-4 rounded-lg shadow-md bg-white cursor-pointer text-left hover:bg-gray-300 transition-all"
+                className="group p-4 rounded-lg shadow-md cursor-pointer text-left hover:opacity-50 transition-all light"
                 onClick={() => handleSelect(Region.All)}
               >
                 <svg
@@ -167,7 +167,7 @@ const Search = ({
           {open && (
             <ul
               ref={optionsRef}
-              className="absolute left-0 mt-2 w-full bg-white rounded-md shadow-md z-10"
+              className="absolute left-0 mt-2 w-full rounded-md shadow-md z-10 light"
             >
               {regions
                 .filter(
@@ -177,7 +177,7 @@ const Search = ({
                   <li key={region}>
                     <button
                       onClick={() => handleSelect(region)}
-                      className="w-full py-1 px-8 text-left cursor-pointer hover:bg-gray-200 transition-all"
+                      className="w-full py-1 px-8 text-left cursor-pointer hover:opacity-80 transition-all"
                     >
                       {region}
                     </button>

@@ -13,7 +13,7 @@ type Props = {
 const Card = ({ name, flag, population, region, capital, onClick }: Props) => {
   return (
     <article
-      className="w-full h-fit rounded-lg shadow-lg bg-white md:cursor-pointer md:hover:shadow-2xl md:hover:scale-105 transition-all"
+      className="w-full h-fit rounded-lg shadow-lg md:cursor-pointer md:hover:shadow-2xl md:hover:scale-105 transition-all light"
       onClick={onClick}
     >
       <figure className="relative w-full h-48 flex justify-center">

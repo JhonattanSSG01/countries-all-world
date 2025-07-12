@@ -91,7 +91,7 @@ const page = () => {
   return (
     <div className="w-[90%] h-auto max-w-[90vw] mx-auto flex flex-col gap-12">
       <button
-        className="w-fit py-3 px-8 flex justify-between items-center gap-2 rounded-lg shadow-lg bg-white cursor-pointer hover:bg-gray-200 transition-all md:mb-12"
+        className="w-fit py-3 px-8 flex justify-between items-center gap-2 rounded-lg shadow-lg cursor-pointer hover:opacity-80 transition-all light | md:mb-12"
         onClick={() => router.push("/")}
       >
         <svg
@@ -110,7 +110,7 @@ const page = () => {
 
       <section className="flex flex-col justify-between gap-10 | lg:flex-row lg:items-center">
         {loading ? (
-          <div className="w-full h-[clamp(40vh,45vh,50vh)] flex flex-col items-center justify-around gap-5 animate-pulse bg-white rounded shadow p-4 | lg:flex-row">
+          <div className="w-full h-[clamp(40vh,45vh,50vh)] flex flex-col items-center justify-around gap-5 animate-pulse rounded shadow p-4 light | lg:flex-row">
             <div className="w-full h-full max-w-[60vh] bg-gray-200 mb-4" />
             <div className="w-full max-w-[80vh] flex flex-col gap-8">
               <div className="h-3 bg-gray-200 rounded w-1/2" />
@@ -180,7 +180,7 @@ const page = () => {
                   {country?.borders.map((border) => (
                     <button
                       key={border}
-                      className="w-fit py-1 px-4 rounded-md shadow-xl bg-white cursor-pointer hover:bg-gray-200 transition-all"
+                      className="w-fit py-1 px-4 rounded-md shadow-xl cursor-pointer hover:opacity-80 transition-all light"
                       onClick={() => router.push(`/country?name=${border}`)}
                     >
                       {border}
